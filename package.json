@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@google/genai": "^1.32.0",
+    "@tailwindcss/vite": "^4.2.0",
     "canvas-confetti": "^1.9.2",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.3",
