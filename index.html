@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    
+    <title>MLR Travel | Powered by CTMS Travel Group</title>
+    <meta name="description" content="The official travel management platform for Major League Rugby. Powered by CTMS Travel Group." />
+    <link rel="icon" href="https://724fta3143.ufs.sh/f/MTE58BV23upXgV6A1ejrws4cYgLUiunyW13XKFv5fNSPZlJD" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MLR Travel | Powered by CTMS Travel Group" />
+    <meta property="og:description" content="The official travel management platform for Major League Rugby. Powered by CTMS Travel Group." />
+    <meta property="og:image" content="https://724fta3143.ufs.sh/f/MTE58BV23upXgV6A1ejrws4cYgLUiunyW13XKFv5fNSPZlJD" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="MLR Travel | Powered by CTMS Travel Group" />
+    <meta property="twitter:description" content="The official travel management platform for Major League Rugby. Powered by CTMS Travel Group." />
+    <meta property="twitter:image" content="https://724fta3143.ufs.sh/f/MTE58BV23upXgV6A1ejrws4cYgLUiunyW13XKFv5fNSPZlJD" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Onest"', 'sans-serif'],
+            },
+            colors: {
+              mlr: {
+                red: '#CE0E2D',
+                dark: '#0A0A0A', // Darker, richer black
+                gray: '#F3F4F6',
+                surface: '#FFFFFF',
+                border: '#E5E7EB',
+                platinum: '#E2E2E2'
+              },
+              // Keeping Hyrox vars mapped to new theme to prevent crashes
+              hyrox: {
+                bg: '#FFFFFF', 
+                charcoal: '#FFFFFF', 
+                yellow: '#CE0E2D',
+                gray: '#F3F4F6',
+              }
+            },
+            boxShadow: {
+              'soft': '0 20px 40px -10px rgba(0,0,0,0.05)',
+              'gloss': 'inset 0 1px 0 0 rgba(255,255,255,0.7)',
+              'float': '0 25px 50px -12px rgba(0, 0, 0, 0.15)',
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.8s ease-out forwards',
+              'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'scale-in': 'scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(40px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              scaleIn: {
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #FAFAFA;
+        color: #0A0A0A;
+      }
+      
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+
+      .btn-gloss {
+        background-image: linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0) 100%);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 4px 10px rgba(0,0,0,0.1);
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #D1D5DB;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9CA3AF;
+      }
+      
+      input, select {
+        color-scheme: light;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.1",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^11.0.3",
+    "clsx": "https://aistudiocdn.com/clsx@^2.1.0",
+    "tailwind-merge": "https://aistudiocdn.com/tailwind-merge@^2.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.32.0",
+    "canvas-confetti": "https://cdn.skypack.dev/canvas-confetti@^1.9.2"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
