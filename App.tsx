@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Dashboard } from './flows/dashboard/Dashboard';
 import { ProfileLayout } from './flows/profile/ProfileLayout';
 import { TravelerInfo } from './flows/profile/TravelerInfo';
@@ -18,28 +18,23 @@ function App() {
   const [view, setView] = useState<AppView>('dashboard');
   const [activeProfileTab, setActiveProfileTab] = useState<ProfileTab>('traveler-info');
   const [bookingTab, setBookingTab] = useState<'flights' | 'hotels' | 'trains' | 'cars'>('flights');
-  
+
   // Mock User Data
-  const [userData, setUserData] = useState<UserData>({
+  const [userData] = useState<UserData>({
     role: 'traveler',
     email: 'athlete@hyrox.com',
     firstName: 'ALEX',
     lastName: 'CROSSFIT',
     companyName: 'HYROX COMMUNITY'
   });
-  
-  const [isSabreConnected, setIsSabreConnected] = useState<boolean>(false);
+
   const [bookingFlight, setBookingFlight] = useState<FlightSegment | null>(null);
   const [initialBookingData, setInitialBookingData] = useState<{ destination: string; date?: Date } | null>(null);
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
 
   // Initialize Sabre Session on App Load
   useEffect(() => {
-    const initSabre = async () => {
-      const token = await authenticateSabre();
-      setIsSabreConnected(!!token);
-    };
-    initSabre();
+    authenticateSabre();
   }, []);
 
   const navigateToProfile = () => {
@@ -77,12 +72,12 @@ function App() {
   };
 
   // Determine active nav item
-  const activeNavItem = view === 'dashboard' 
-    ? 'races' 
-    : view === 'booking' 
+  const activeNavItem = view === 'dashboard'
+    ? 'races'
+    : view === 'booking'
       ? (bookingTab === 'hotels' ? 'hotels' : 'flights')
-      : view === 'profile' 
-        ? 'requests' 
+      : view === 'profile'
+        ? 'requests'
         : undefined;
 
   // Don't show navbar in the immersive match booking flow
@@ -90,64 +85,64 @@ function App() {
 
   return (
     <div className="antialiased text-white bg-hyrox-charcoal min-h-screen relative font-sans">
-      
+
       {showNavbar && (
-        <Navbar 
-          userData={userData} 
+        <Navbar
+          userData={userData}
           onNavigateToProfile={navigateToProfile}
           onNavigateToDashboard={() => setView('dashboard')}
           onNavigateToService={handleNavigateToService}
           activeItem={activeNavItem}
         />
       )}
-      
+
       {view === 'dashboard' && (
-        <Dashboard 
-          userData={userData} 
-          onNavigateToProfile={navigateToProfile} 
+        <Dashboard
+          userData={userData}
+          onNavigateToProfile={navigateToProfile}
           onNavigateToBooking={handleNavigateToBooking}
           onMatchSelect={handleMatchSelect}
         />
       )}
       {view === 'booking' && (
-        <BookFlight 
+        <BookFlight
           initialSearchData={initialBookingData}
           onNavigateToCheckout={handleFlightSelection}
           initialTab={bookingTab}
         />
       )}
       {view === 'checkout' && (
-        <Checkout 
+        <Checkout
           flight={bookingFlight}
-          onBack={() => setView('booking')} 
-          onFinish={() => setView('dashboard')} 
+          onBack={() => setView('booking')}
+          onFinish={() => setView('dashboard')}
         />
       )}
       {view === 'match-booking' && selectedMatch && (
-        <MatchBookingWizard 
+        <MatchBookingWizard
           match={selectedMatch}
           userData={userData}
           onClose={() => setView('dashboard')}
         />
       )}
       {view === 'profile' && (
-        <ProfileLayout 
-          userData={userData} 
-          activeTab={activeProfileTab} 
+        <ProfileLayout
+          userData={userData}
+          activeTab={activeProfileTab}
           onTabChange={setActiveProfileTab}
         >
           {activeProfileTab === 'traveler-info' && <TravelerInfo initialData={userData} />}
           {activeProfileTab === 'loyalty-programs' && <LoyaltyPrograms />}
           {activeProfileTab === 'rewards' && <RewardsView />}
-          
+
           {/* Placeholder for other tabs */}
           {activeProfileTab !== 'traveler-info' && activeProfileTab !== 'loyalty-programs' && activeProfileTab !== 'rewards' && (
             <div className="flex flex-col items-center justify-center py-20 text-center opacity-50">
-                <div className="w-16 h-16 bg-stone-900 rounded-full flex items-center justify-center mb-4 text-hyrox-yellow border border-stone-800">
-                  <span className="text-2xl">🚧</span>
-                </div>
-                <h3 className="text-xl font-bold text-white uppercase italic">Coming Soon</h3>
-                <p className="text-stone-500">This section is under development.</p>
+              <div className="w-16 h-16 bg-stone-900 rounded-full flex items-center justify-center mb-4 text-hyrox-yellow border border-stone-800">
+                <span className="text-2xl">🚧</span>
+              </div>
+              <h3 className="text-xl font-bold text-white uppercase italic">Coming Soon</h3>
+              <p className="text-stone-500">This section is under development.</p>
             </div>
           )}
         </ProfileLayout>

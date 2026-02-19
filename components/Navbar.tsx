@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import { Phone } from 'lucide-react';
 import { UserData } from '../types';
 
@@ -11,15 +11,13 @@ interface NavbarProps {
   activeItem?: 'races' | 'hotels' | 'flights' | 'requests';
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ 
-  userData, 
-  onNavigateToProfile, 
-  onNavigateToDashboard, 
+export const Navbar: React.FC<NavbarProps> = ({
+  onNavigateToDashboard,
   activeItem
 }) => {
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -31,21 +29,20 @@ export const Navbar: React.FC<NavbarProps> = ({
   const isSolid = scrolled || (activeItem && activeItem !== 'races');
 
   return (
-    <nav 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isSolid 
-          ? 'bg-white/90 backdrop-blur-xl border-b border-gray-100 py-4 shadow-sm text-black' 
-          : 'bg-transparent py-6 text-white'
-      }`}
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isSolid
+        ? 'bg-white/90 backdrop-blur-xl border-b border-gray-100 py-4 shadow-sm text-black'
+        : 'bg-transparent py-6 text-white'
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-8 flex items-center justify-between">
-        
+
         {/* Logo Area */}
-        <button 
+        <button
           onClick={onNavigateToDashboard}
           className="flex items-center gap-3 group"
         >
-          <img 
+          <img
             src="https://724fta3143.ufs.sh/f/MTE58BV23upXgV6A1ejrws4cYgLUiunyW13XKFv5fNSPZlJD"
             alt="Major League Rugby"
             className="h-12 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300"
@@ -61,8 +58,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Right Actions */}
         <div className="flex items-center gap-6">
           <div className={`hidden lg:flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-full transition-colors ${isSolid ? 'bg-stone-50 text-stone-600' : 'bg-white/10 text-white border border-white/20'}`}>
-             <Phone size={14} className={isSolid ? 'text-mlr-red' : 'text-white'} />
-             <span>1.866.359.2867</span>
+            <Phone size={14} className={isSolid ? 'text-mlr-red' : 'text-white'} />
+            <span>1.866.359.2867</span>
           </div>
         </div>
       </div>

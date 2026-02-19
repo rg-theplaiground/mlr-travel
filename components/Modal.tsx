@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
 
@@ -13,18 +13,18 @@ interface ModalProps {
   variant?: 'default' | 'dark'; // 'default' is now Dark Hyrox style
 }
 
-export const Modal: React.FC<ModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  title, 
-  children, 
+export const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  children,
   size = 'md',
   hideHeader = false,
-  variant = 'default'
+  variant: _variant = 'default'
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
       document.body.style.overflow = 'hidden';
@@ -51,8 +51,8 @@ export const Modal: React.FC<ModalProps> = ({
   return createPortal(
     <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm transition-opacity" 
+      <div
+        className="absolute inset-0 bg-black/90 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
@@ -65,7 +65,7 @@ export const Modal: React.FC<ModalProps> = ({
         {!hideHeader && (
           <div className={`flex items-center justify-between p-6 border-b ${borderClasses} shrink-0`}>
             <h3 className="text-xl font-black italic uppercase tracking-wide">{title}</h3>
-            <button 
+            <button
               onClick={onClose}
               className={`p-2 rounded-full transition-colors ${closeButtonClasses}`}
             >
@@ -75,14 +75,14 @@ export const Modal: React.FC<ModalProps> = ({
         )}
 
         {hideHeader && (
-           <button 
-              onClick={onClose}
-              className={`absolute top-6 right-6 z-50 p-2 rounded-full backdrop-blur-md transition-colors shadow-sm ${closeButtonClasses} bg-black/20`}
-            >
-              <X size={20} />
-           </button>
+          <button
+            onClick={onClose}
+            className={`absolute top-6 right-6 z-50 p-2 rounded-full backdrop-blur-md transition-colors shadow-sm ${closeButtonClasses} bg-black/20`}
+          >
+            <X size={20} />
+          </button>
         )}
-        
+
         <div className={`overflow-y-auto custom-scrollbar ${!hideHeader ? 'p-6' : ''}`}>
           {children}
         </div>

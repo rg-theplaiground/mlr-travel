@@ -1,5 +1,4 @@
-
-import React from 'react';
+import * as React from 'react';
 
 type SortOption = 'recommended' | 'cheapest' | 'fastest';
 
@@ -17,23 +16,23 @@ interface FlightSortBarProps {
 
 export const FlightSortBar: React.FC<FlightSortBarProps> = ({ activeSort, onSortChange, stats }) => {
   const options = [
-    { 
-      id: 'recommended' as SortOption, 
-      label: 'Recommended', 
-      price: stats.recommended.price, 
-      duration: stats.recommended.duration 
+    {
+      id: 'recommended' as SortOption,
+      label: 'Recommended',
+      price: stats.recommended.price,
+      duration: stats.recommended.duration
     },
-    { 
-      id: 'cheapest' as SortOption, 
-      label: 'Cheapest', 
-      price: stats.cheapest.price, 
-      duration: stats.cheapest.duration 
+    {
+      id: 'cheapest' as SortOption,
+      label: 'Cheapest',
+      price: stats.cheapest.price,
+      duration: stats.cheapest.duration
     },
-    { 
-      id: 'fastest' as SortOption, 
-      label: 'Fastest', 
-      price: stats.fastest.price, 
-      duration: stats.fastest.duration 
+    {
+      id: 'fastest' as SortOption,
+      label: 'Fastest',
+      price: stats.fastest.price,
+      duration: stats.fastest.duration
     },
   ];
 
@@ -47,25 +46,25 @@ export const FlightSortBar: React.FC<FlightSortBarProps> = ({ activeSort, onSort
             onClick={() => onSortChange(option.id)}
             className={`
               relative flex-1 flex flex-col items-center justify-center p-6 rounded-[2rem] transition-all duration-300 group
-              ${isActive 
-                ? 'glass-panel shadow-md scale-[1.02] border-camina-brand/20' 
+              ${isActive
+                ? 'glass-panel shadow-md scale-[1.02] border-camina-brand/20'
                 : 'bg-transparent hover:bg-white/40 opacity-60 hover:opacity-100'}
             `}
           >
-             {/* Label */}
-             <span className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isActive ? 'text-camina-brand' : 'text-camina-secondary'}`}>
-               {option.label}
-             </span>
-             
-             {/* Values */}
-             <div className="flex items-center gap-2">
-                <span className={`text-2xl font-bold ${isActive ? 'text-camina-primary' : 'text-camina-primary/80'}`}>
-                  ${Math.floor(option.price).toLocaleString()}
-                </span>
-                <span className={`text-sm font-medium ${isActive ? 'text-camina-secondary' : 'text-camina-secondary/70'}`}>
-                  • {option.duration}
-                </span>
-             </div>
+            {/* Label */}
+            <span className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isActive ? 'text-camina-brand' : 'text-camina-secondary'}`}>
+              {option.label}
+            </span>
+
+            {/* Values */}
+            <div className="flex items-center gap-2">
+              <span className={`text-2xl font-bold ${isActive ? 'text-camina-primary' : 'text-camina-primary/80'}`}>
+                ${Math.floor(option.price).toLocaleString()}
+              </span>
+              <span className={`text-sm font-medium ${isActive ? 'text-camina-secondary' : 'text-camina-secondary/70'}`}>
+                • {option.duration}
+              </span>
+            </div>
           </button>
         );
       })}

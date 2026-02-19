@@ -1,5 +1,4 @@
-
-import React, { useState, useRef, useEffect } from 'react';
+import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown, Check } from 'lucide-react';
 
@@ -11,10 +10,10 @@ interface TripTypeSelectorProps {
 }
 
 export const TripTypeSelector: React.FC<TripTypeSelectorProps> = ({ value, onChange }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+  const [isOpen, setIsOpen] = React.useState(false);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+  const [dropdownStyle, setDropdownStyle] = React.useState<React.CSSProperties>({});
 
   const options: { value: TripType; label: string }[] = [
     { value: 'roundtrip', label: 'Roundtrip' },
@@ -24,7 +23,7 @@ export const TripTypeSelector: React.FC<TripTypeSelectorProps> = ({ value, onCha
 
   const currentLabel = options.find(o => o.value === value)?.label;
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       setDropdownStyle({
@@ -36,7 +35,7 @@ export const TripTypeSelector: React.FC<TripTypeSelectorProps> = ({ value, onCha
     }
   }, [isOpen]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleInteraction = (event: Event) => {
       if (event.type === 'scroll' || event.type === 'resize') {
         setIsOpen(false);
@@ -71,8 +70,8 @@ export const TripTypeSelector: React.FC<TripTypeSelectorProps> = ({ value, onCha
         className={`
           flex items-center gap-2 font-black uppercase text-sm tracking-wider
           px-4 py-2.5 transition-all duration-200 border-2
-          ${isOpen 
-            ? 'bg-stone-900 border-stone-700 text-white' 
+          ${isOpen
+            ? 'bg-stone-900 border-stone-700 text-white'
             : 'bg-black border-stone-800 text-stone-400 hover:border-stone-600 hover:text-white'}
         `}
       >
@@ -81,7 +80,7 @@ export const TripTypeSelector: React.FC<TripTypeSelectorProps> = ({ value, onCha
       </button>
 
       {isOpen && createPortal(
-        <div 
+        <div
           ref={dropdownRef}
           style={dropdownStyle}
           className="w-48 bg-stone-900 border border-stone-800 shadow-2xl animate-scale-in origin-top-left"
@@ -96,8 +95,8 @@ export const TripTypeSelector: React.FC<TripTypeSelectorProps> = ({ value, onCha
                 }}
                 className={`
                   w-full flex items-center justify-between px-4 py-3 text-xs font-black uppercase tracking-wider transition-colors
-                  ${value === option.value 
-                    ? 'bg-hyrox-yellow text-black' 
+                  ${value === option.value
+                    ? 'bg-hyrox-yellow text-black'
                     : 'text-stone-400 hover:bg-stone-800 hover:text-white'}
                 `}
               >

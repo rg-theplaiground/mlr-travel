@@ -1,8 +1,7 @@
-
-import React, { useState, useRef, useEffect } from 'react';
+import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
-import { TripType } from './TripTypeSelector';
+import { TripType } from '@/flows/booking/components/TripTypeSelector';
 
 interface DateRangePickerProps {
   startDate: Date | null;
@@ -22,10 +21,10 @@ const MONTHS = [
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-export const DateRangePicker: React.FC<DateRangePickerProps> = ({ 
-  startDate, 
-  endDate, 
-  onChange, 
+export const DateRangePicker: React.FC<DateRangePickerProps> = ({
+  startDate,
+  endDate,
+  onChange,
   tripType,
   minDate = new Date(),
   className = '',
@@ -33,21 +32,21 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
   hideIcon = false,
   iconPosition = 'left'
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
-  
-  // Internal state for the calendar view (which month we are looking at)
-  const [viewDate, setViewDate] = useState(startDate || new Date());
-  const [hoverDate, setHoverDate] = useState<Date | null>(null);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+  const [dropdownStyle, setDropdownStyle] = React.useState<React.CSSProperties>({});
 
-  useEffect(() => {
+  // Internal state for the calendar view (which month we are looking at)
+  const [viewDate, setViewDate] = React.useState(startDate || new Date());
+  const [hoverDate, setHoverDate] = React.useState<Date | null>(null);
+
+  React.useEffect(() => {
     if (startDate) setViewDate(startDate);
   }, [startDate]);
 
   // Positioning Logic for Portal
-  useEffect(() => {
+  React.useEffect(() => {
     if (isOpen && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
@@ -82,7 +81,7 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
     }
   }, [isOpen]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleInteraction = (event: Event) => {
       // Close on scroll or resize to prevent floating element detachment
       if (event.type === 'scroll' || event.type === 'resize') {
@@ -123,19 +122,19 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
   const isSameDay = (d1: Date | null, d2: Date | null) => {
     if (!d1 || !d2) return false;
-    return d1.getDate() === d2.getDate() && 
-           d1.getMonth() === d2.getMonth() && 
-           d1.getFullYear() === d2.getFullYear();
+    return d1.getDate() === d2.getDate() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getFullYear() === d2.getFullYear();
   };
 
   const isBefore = (d1: Date, d2: Date) => {
-    return new Date(d1.getFullYear(), d1.getMonth(), d1.getDate()) < 
-           new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
+    return new Date(d1.getFullYear(), d1.getMonth(), d1.getDate()) <
+      new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
   };
 
   const handleDateClick = (day: number) => {
     const clickedDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-    
+
     // One Way Logic
     if (tripType === 'one-way') {
       onChange(clickedDate, null);
@@ -170,8 +169,8 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
   };
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', { 
-      month: 'numeric', 
+    return date.toLocaleDateString('en-US', {
+      month: 'numeric',
       day: 'numeric',
       year: 'numeric'
     });
@@ -192,11 +191,11 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
     for (let day = 1; day <= daysInMonth; day++) {
       const current = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-      
+
       const isDisabled = minDate && isBefore(current, minDate);
       const isStart = isSameDay(current, startDate);
       const isEnd = isSameDay(current, endDate);
-      
+
       let isInRange = false;
       if (startDate && endDate) {
         isInRange = current > startDate && current < endDate;
@@ -219,9 +218,9 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
           className={`
             w-7 h-7 relative flex items-center justify-center text-xs font-bold transition-all z-10 rounded-full
             ${isDisabled ? 'text-stone-300 cursor-not-allowed' : 'cursor-pointer'}
-            ${isStart || isEnd 
-                ? 'bg-mlr-red text-white shadow-sm shadow-red-200' 
-                : (!isDisabled ? 'text-stone-700 hover:bg-stone-100 hover:text-black' : '')}
+            ${isStart || isEnd
+              ? 'bg-mlr-red text-white shadow-sm shadow-red-200'
+              : (!isDisabled ? 'text-stone-700 hover:bg-stone-100 hover:text-black' : '')}
           `}
         >
           {isInRange && !isDisabled && !isStart && !isEnd && (
@@ -243,7 +242,7 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
   return (
     <div className={`relative ${className}`} ref={containerRef}>
-      <div 
+      <div
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center cursor-pointer group h-full"
       >
@@ -251,7 +250,7 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
           {iconPosition === 'left' && !hideIcon && (
             <Calendar className={`transition-colors ${isOpen ? 'text-mlr-red' : 'text-stone-400 group-hover:text-stone-900'}`} size={20} />
           )}
-          
+
           <span className={`font-bold truncate flex-1 text-left ${startDate ? 'text-inherit' : 'text-stone-300'}`}>
             {displayString()}
           </span>
@@ -263,18 +262,18 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
       </div>
 
       {isOpen && createPortal(
-        <div 
+        <div
           ref={dropdownRef}
           style={dropdownStyle}
           className="fixed bg-white rounded-2xl shadow-2xl border border-stone-100 p-3 animate-scale-in text-stone-900"
         >
-          
+
           {/* Header */}
           <div className="flex items-center justify-between mb-2 border-b border-stone-100 pb-2">
             <button onClick={handlePrevMonth} className="p-1 hover:bg-stone-50 rounded-full text-stone-400 hover:text-stone-900 transition-colors">
               <ChevronLeft size={16} />
             </button>
-            <button 
+            <button
               className="text-stone-900 font-bold text-sm uppercase tracking-wide hover:bg-stone-50 px-2 py-1 rounded-lg transition-colors flex items-center gap-1"
               onClick={(e) => e.stopPropagation()}
             >
@@ -297,18 +296,18 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
           {/* Footer Actions */}
           <div className="flex justify-between items-center pt-2 border-t border-stone-100">
-             <button 
-               onClick={handleClear}
-               className="text-[10px] font-bold text-stone-400 hover:text-stone-900 transition-colors uppercase tracking-wider"
-             >
-               Clear
-             </button>
-             <button 
-               onClick={handleToday}
-               className="text-[10px] font-bold text-mlr-red hover:text-red-700 transition-colors uppercase tracking-wider"
-             >
-               Today
-             </button>
+            <button
+              onClick={handleClear}
+              className="text-[10px] font-bold text-stone-400 hover:text-stone-900 transition-colors uppercase tracking-wider"
+            >
+              Clear
+            </button>
+            <button
+              onClick={handleToday}
+              className="text-[10px] font-bold text-mlr-red hover:text-red-700 transition-colors uppercase tracking-wider"
+            >
+              Today
+            </button>
           </div>
         </div>,
         document.body

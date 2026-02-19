@@ -1,7 +1,6 @@
-import React from 'react';
-import { X, Plus, Calendar, MapPin, Sparkles } from 'lucide-react';
-import { Modal } from '../../../components/Modal';
-import { Button } from '../../../components/Button';
+import * as React from 'react';
+import { X, Plus, Calendar, Sparkles } from 'lucide-react';
+import { Modal } from '@/components/Modal';
 
 interface TripSelectionModalProps {
   isOpen: boolean;
@@ -28,9 +27,9 @@ const UPCOMING_TRIPS = [
   }
 ];
 
-export const TripSelectionModal: React.FC<TripSelectionModalProps> = ({ 
-  isOpen, 
-  onClose, 
+export const TripSelectionModal: React.FC<TripSelectionModalProps> = ({
+  isOpen,
+  onClose,
   onSelectTrip,
   onCreateTrip
 }) => {
@@ -40,7 +39,7 @@ export const TripSelectionModal: React.FC<TripSelectionModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-2xl font-bold text-stone-900">Upcoming trips</h3>
-          <button 
+          <button
             onClick={onClose}
             className="p-2 hover:bg-stone-100 rounded-full text-stone-400 hover:text-stone-900 transition-colors"
           >
@@ -50,22 +49,22 @@ export const TripSelectionModal: React.FC<TripSelectionModalProps> = ({
 
         {/* Info Banner */}
         <div className="bg-stone-50 rounded-2xl p-4 mb-6 border border-stone-100 flex gap-4">
-           <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-stone-900 shadow-sm flex-shrink-0">
-             <Sparkles size={18} />
-           </div>
-           <div>
-              <div className="flex items-center gap-2 mb-1">
-                 <h4 className="font-bold text-stone-900 text-sm">Planning made easier</h4>
-                 <span className="px-2 py-0.5 bg-stone-200 text-stone-600 text-[10px] font-bold rounded-full uppercase tracking-wider">Beta</span>
-              </div>
-              <p className="text-xs text-stone-500 leading-relaxed">
-                Compare before you commit by saving hotel and flight options to your trips. Only available for business trips on desktop, for now.
-              </p>
-           </div>
+          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-stone-900 shadow-sm flex-shrink-0">
+            <Sparkles size={18} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <h4 className="font-bold text-stone-900 text-sm">Planning made easier</h4>
+              <span className="px-2 py-0.5 bg-stone-200 text-stone-600 text-[10px] font-bold rounded-full uppercase tracking-wider">Beta</span>
+            </div>
+            <p className="text-xs text-stone-500 leading-relaxed">
+              Compare before you commit by saving hotel and flight options to your trips. Only available for business trips on desktop, for now.
+            </p>
+          </div>
         </div>
 
         {/* Create New Trip Button */}
-        <button 
+        <button
           onClick={onCreateTrip}
           className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl border-2 border-dashed border-stone-200 text-stone-500 font-bold hover:border-stone-400 hover:text-stone-900 hover:bg-stone-50 transition-all mb-6 group"
         >
@@ -84,16 +83,16 @@ export const TripSelectionModal: React.FC<TripSelectionModalProps> = ({
               <div className="w-16 h-16 rounded-xl overflow-hidden bg-stone-200 flex-shrink-0 relative">
                 <img src={trip.image} alt={trip.destination} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
               </div>
-              
+
               <div className="flex-1">
                 <h4 className="font-bold text-stone-900 group-hover:text-black">{trip.destination}</h4>
                 <div className="flex items-center gap-3 mt-1 text-xs text-stone-500">
-                   <div className="flex items-center gap-1">
-                     <Calendar size={12} />
-                     <span>{trip.dates}</span>
-                   </div>
-                   <div className="w-1 h-1 rounded-full bg-stone-300"></div>
-                   <span>{trip.items} items saved</span>
+                  <div className="flex items-center gap-1">
+                    <Calendar size={12} />
+                    <span>{trip.dates}</span>
+                  </div>
+                  <div className="w-1 h-1 rounded-full bg-stone-300"></div>
+                  <span>{trip.items} items saved</span>
                 </div>
               </div>
 

@@ -1,5 +1,4 @@
-
-import React, { useRef, useEffect, useState } from 'react';
+import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown } from 'lucide-react';
 
@@ -14,34 +13,34 @@ interface FilterDropdownProps {
   width?: string;
 }
 
-export const FilterDropdown: React.FC<FilterDropdownProps> = ({ 
-  label, 
-  isOpen, 
-  onToggle, 
-  onClose, 
+export const FilterDropdown: React.FC<FilterDropdownProps> = ({
+  label,
+  isOpen,
+  onToggle,
+  onClose,
   onReset,
-  isActive = false, 
+  isActive = false,
   children,
   width = 'w-80'
 }) => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+  const [dropdownStyle, setDropdownStyle] = React.useState<React.CSSProperties>({});
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      
+
       setDropdownStyle({
         position: 'fixed',
         top: `${rect.bottom + 8}px`,
         left: `${rect.left}px`,
-        zIndex: 9999, 
+        zIndex: 9999,
       });
     }
   }, [isOpen]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleInteraction = (event: Event) => {
       if (event.type === 'scroll' || event.type === 'resize') {
         onClose();
@@ -51,9 +50,9 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
       const target = event.target as Node;
 
       if (
-        dropdownRef.current && 
+        dropdownRef.current &&
         !dropdownRef.current.contains(target) &&
-        buttonRef.current && 
+        buttonRef.current &&
         !buttonRef.current.contains(target)
       ) {
         onClose();
@@ -62,7 +61,7 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
 
     if (isOpen) {
       document.addEventListener('mousedown', handleInteraction);
-      window.addEventListener('scroll', handleInteraction, true); 
+      window.addEventListener('scroll', handleInteraction, true);
       window.addEventListener('resize', handleInteraction);
     }
     return () => {
@@ -74,13 +73,13 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
 
   return (
     <>
-      <button 
+      <button
         ref={buttonRef}
         onClick={onToggle}
         className={`
           flex items-center gap-2 px-5 py-2.5 text-xs font-black uppercase tracking-wider transition-all border shadow-sm whitespace-nowrap
           ${isOpen || isActive
-            ? 'bg-hyrox-yellow text-black border-hyrox-yellow shadow-[0_0_10px_rgba(255,255,0,0.3)]' 
+            ? 'bg-hyrox-yellow text-black border-hyrox-yellow shadow-[0_0_10px_rgba(255,255,0,0.3)]'
             : 'bg-black text-stone-400 border-stone-800 hover:border-stone-600 hover:text-white'}
         `}
       >
@@ -89,14 +88,14 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
       </button>
 
       {isOpen && createPortal(
-        <div 
+        <div
           ref={dropdownRef}
           style={dropdownStyle}
           className={`${width} bg-stone-900 shadow-2xl border border-stone-800 animate-scale-in origin-top-left overflow-hidden`}
         >
           {onReset && (
             <div className="flex justify-end px-5 pt-4">
-              <button 
+              <button
                 onClick={onReset}
                 className="text-[10px] font-black text-stone-500 hover:text-white transition-colors uppercase tracking-widest"
               >
@@ -104,7 +103,7 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
               </button>
             </div>
           )}
-          
+
           <div className="p-6">
             {children}
           </div>

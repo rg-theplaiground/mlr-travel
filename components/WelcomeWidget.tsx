@@ -1,5 +1,5 @@
 
-import React from 'react';
+import * as React from 'react';
 import { CheckCircle2, Circle, ChevronRight, X } from 'lucide-react';
 import { UserData } from '../types';
 
@@ -9,7 +9,7 @@ interface WelcomeWidgetProps {
   onAddTravelerInfo: () => void;
 }
 
-export const WelcomeWidget: React.FC<WelcomeWidgetProps> = ({ userData, onDismiss, onAddTravelerInfo }) => {
+export const WelcomeWidget: React.FC<WelcomeWidgetProps> = ({ userData: _userData, onDismiss, onAddTravelerInfo }) => {
   return (
     <div className="bg-stone-900 border border-stone-800 rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden group animate-fade-in">
       {/* Decorative gradient blob */}
@@ -25,7 +25,7 @@ export const WelcomeWidget: React.FC<WelcomeWidgetProps> = ({ userData, onDismis
               <span className="text-stone-500 text-sm">0 / 3 tasks completed</span>
             </p>
             <div className="w-32 h-1 bg-stone-800 rounded-full mt-2 overflow-hidden">
-               <div className="w-0 h-full bg-hyrox-yellow rounded-full"></div>
+              <div className="w-0 h-full bg-hyrox-yellow rounded-full"></div>
             </div>
           </div>
           <button onClick={onDismiss} className="p-2 hover:bg-stone-800 rounded-full text-stone-500 hover:text-white transition-colors">
@@ -35,35 +35,35 @@ export const WelcomeWidget: React.FC<WelcomeWidgetProps> = ({ userData, onDismis
 
         <div className="space-y-4">
           {/* Primary Task - Highlighted */}
-          <div 
+          <div
             onClick={onAddTravelerInfo}
             className="flex flex-col md:flex-row md:items-center gap-4 p-5 rounded-2xl bg-black border border-stone-800 cursor-pointer hover:border-hyrox-yellow/50 transition-all duration-300 group/item"
           >
-             <div className="flex items-start gap-4 flex-1">
-               <div className="w-6 h-6 rounded-full border-2 border-hyrox-yellow flex items-center justify-center flex-shrink-0 mt-0.5 bg-black">
-                 <div className="w-0 h-0 bg-hyrox-yellow rounded-full group-hover/item:w-3 group-hover/item:h-3 transition-all duration-300" />
-               </div>
-               <div>
-                  <h4 className="font-bold text-white uppercase tracking-wide">Add your traveler info</h4>
-                  <p className="text-sm text-stone-500 mt-1">Required for booking. Add passport & preferences.</p>
-               </div>
-             </div>
-             
-             <button className="flex items-center justify-center gap-2 bg-stone-900 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-white shadow-sm border border-stone-800 group-hover/item:bg-hyrox-yellow group-hover/item:text-black transition-all">
-               Get started
-               <ChevronRight size={14} />
-             </button>
+            <div className="flex items-start gap-4 flex-1">
+              <div className="w-6 h-6 rounded-full border-2 border-hyrox-yellow flex items-center justify-center flex-shrink-0 mt-0.5 bg-black">
+                <div className="w-0 h-0 bg-hyrox-yellow rounded-full group-hover/item:w-3 group-hover/item:h-3 transition-all duration-300" />
+              </div>
+              <div>
+                <h4 className="font-bold text-white uppercase tracking-wide">Add your traveler info</h4>
+                <p className="text-sm text-stone-500 mt-1">Required for booking. Add passport & preferences.</p>
+              </div>
+            </div>
+
+            <button className="flex items-center justify-center gap-2 bg-stone-900 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-white shadow-sm border border-stone-800 group-hover/item:bg-hyrox-yellow group-hover/item:text-black transition-all">
+              Get started
+              <ChevronRight size={14} />
+            </button>
           </div>
 
-          <ChecklistItem 
-            title="Add your loyalty programs" 
-            status="pending" 
+          <ChecklistItem
+            title="Add your loyalty programs"
+            status="pending"
             subtitle="Connect airline & hotel memberships"
             actionLabel="Connect"
           />
-          <ChecklistItem 
-            title="Learn about Hyrox Rewards" 
-            status="pending" 
+          <ChecklistItem
+            title="Learn about Hyrox Rewards"
+            status="pending"
             subtitle="Earn points on race travel"
             actionLabel="View"
           />
@@ -73,9 +73,9 @@ export const WelcomeWidget: React.FC<WelcomeWidgetProps> = ({ userData, onDismis
   );
 };
 
-const ChecklistItem: React.FC<{ 
-  title: string; 
-  subtitle: string; 
+const ChecklistItem: React.FC<{
+  title: string;
+  subtitle: string;
   status: 'completed' | 'pending';
   actionLabel?: string;
   onClick?: () => void;
@@ -83,13 +83,13 @@ const ChecklistItem: React.FC<{
   const isCompleted = status === 'completed';
 
   return (
-    <div 
+    <div
       onClick={onClick}
       className={`
       flex items-center gap-4 p-5 rounded-2xl border transition-all duration-300 cursor-pointer
-      ${isCompleted 
-        ? 'bg-stone-900 border-transparent opacity-50' 
-        : 'bg-stone-900/50 border-stone-800 hover:border-stone-700 hover:bg-stone-900'}
+      ${isCompleted
+          ? 'bg-stone-900 border-transparent opacity-50'
+          : 'bg-stone-900/50 border-stone-800 hover:border-stone-700 hover:bg-stone-900'}
     `}>
       <div className={`
         flex-shrink-0 transition-colors
@@ -97,7 +97,7 @@ const ChecklistItem: React.FC<{
       `}>
         {isCompleted ? <CheckCircle2 size={24} /> : <Circle size={24} />}
       </div>
-      
+
       <div className="flex-1">
         <h4 className={`font-bold uppercase tracking-wide text-sm ${isCompleted ? 'text-stone-600 line-through' : 'text-stone-300'}`}>
           {title}

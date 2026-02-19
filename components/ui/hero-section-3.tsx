@@ -13,7 +13,7 @@ interface ScrollFlyInProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const ScrollFlyIn = React.forwardRef<HTMLDivElement, ScrollFlyInProps>(
-  ({ children, revealContent, imageUrl, imageAlt = "Animated image", className, ...props }, ref) => {
+  ({ children, revealContent, imageUrl, imageAlt = "Animated image", className, ...props }, _ref) => {
     const targetRef = React.useRef<HTMLDivElement>(null);
 
     const { scrollYProgress } = useScroll({
@@ -22,7 +22,7 @@ const ScrollFlyIn = React.forwardRef<HTMLDivElement, ScrollFlyInProps>(
     });
 
     // --- Animation Timeline (0.0 to 1.0 scroll progress) ---
-    
+
     // 1. Initial Text: Fades out quickly [0.0 - 0.2]
     const textOpacity = useTransform(scrollYProgress, [0.05, 0.25], [1, 0]);
     const textScale = useTransform(scrollYProgress, [0.05, 0.25], [1, 0.9]);
@@ -31,7 +31,7 @@ const ScrollFlyIn = React.forwardRef<HTMLDivElement, ScrollFlyInProps>(
     // 2. Plane: Flies from left to right [0.2 - 0.6]
     // Using -120vw to 120vw ensures it starts/ends completely off-screen
     const planeX = useTransform(scrollYProgress, [0.15, 0.65], ["-120vw", "120vw"]);
-    
+
     // 3. Reveal Content: Fades in after plane clears [0.6 - 0.8]
     const revealOpacity = useTransform(scrollYProgress, [0.6, 0.8], [0, 1]);
     const revealScale = useTransform(scrollYProgress, [0.6, 0.8], [0.9, 1]);
@@ -41,18 +41,18 @@ const ScrollFlyIn = React.forwardRef<HTMLDivElement, ScrollFlyInProps>(
       <div ref={targetRef} className={cn("relative h-[400vh] bg-stone-50", className)} {...props}>
         {/* Sticky container holds the stage fixed while user scrolls "time" */}
         <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-          
+
           {/* Layer 1: Initial Text (Absolute centered) */}
-          <motion.div 
-            style={{ opacity: textOpacity, scale: textScale, filter: `blur(${textBlur})` }} 
+          <motion.div
+            style={{ opacity: textOpacity, scale: textScale, filter: `blur(${textBlur})` }}
             className="absolute inset-0 flex items-center justify-center z-10 p-4"
           >
             {children}
           </motion.div>
 
           {/* Layer 2: Plane (Absolute, flies across) */}
-          <motion.div 
-            style={{ x: planeX }} 
+          <motion.div
+            style={{ x: planeX }}
             className="absolute top-1/2 left-0 -translate-y-1/2 z-20 w-full flex items-center justify-center pointer-events-none will-change-transform"
           >
             <img
@@ -70,7 +70,7 @@ const ScrollFlyIn = React.forwardRef<HTMLDivElement, ScrollFlyInProps>(
             style={{ opacity: revealOpacity, scale: revealScale, y: revealY }}
             className="absolute inset-0 flex items-center justify-center z-10 p-4 pointer-events-auto"
           >
-             {revealContent}
+            {revealContent}
           </motion.div>
 
         </div>

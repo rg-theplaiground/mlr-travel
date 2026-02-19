@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Check, X, Loader2, ChevronDown } from 'lucide-react';
+import * as React from 'react';
+import { Check, X, Loader2 } from 'lucide-react';
 
 interface FareSelectionPanelProps {
   basePrice: number;
@@ -8,13 +8,13 @@ interface FareSelectionPanelProps {
 }
 
 export const FareSelectionPanel: React.FC<FareSelectionPanelProps> = ({ basePrice, onSelect }) => {
-  const [verifyingId, setVerifyingId] = useState<string | null>(null);
+  const [verifyingId, setVerifyingId] = React.useState<string | null>(null);
 
   const handleSelect = (id: string) => {
     setVerifyingId(id);
     setTimeout(() => {
-        setVerifyingId(null);
-        onSelect(id);
+      setVerifyingId(null);
+      onSelect(id);
     }, 1000);
   };
 
@@ -53,12 +53,12 @@ export const FareSelectionPanel: React.FC<FareSelectionPanelProps> = ({ basePric
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-stone-50/50 rounded-[2rem] mt-2 animate-slide-up">
       {FARE_OPTIONS.map((fare) => (
-        <div 
+        <div
           key={fare.id}
           className={`
             relative flex flex-col p-6 rounded-[2rem] border transition-all duration-300
-            ${fare.recommended 
-              ? 'border-camina-brand shadow-lg bg-white ring-2 ring-camina-brand/10' 
+            ${fare.recommended
+              ? 'border-camina-brand shadow-lg bg-white ring-2 ring-camina-brand/10'
               : 'border-stone-200 bg-white hover:border-stone-300 hover:shadow-md'}
           `}
         >
@@ -90,17 +90,17 @@ export const FareSelectionPanel: React.FC<FareSelectionPanelProps> = ({ basePric
             ))}
           </div>
 
-          <button 
+          <button
             onClick={(e) => {
-                e.stopPropagation();
-                handleSelect(fare.id);
+              e.stopPropagation();
+              handleSelect(fare.id);
             }}
             disabled={verifyingId !== null}
             className={`
               w-full py-3 rounded-xl font-bold text-sm transition-all tracking-wide flex items-center justify-center gap-2
-              ${fare.recommended 
-                  ? 'bg-gradient-to-r from-camina-brand to-camina-brand-dark text-white hover:brightness-110 shadow-md' 
-                  : 'bg-stone-100 text-stone-900 hover:bg-stone-200'}
+              ${fare.recommended
+                ? 'bg-gradient-to-r from-camina-brand to-camina-brand-dark text-white hover:brightness-110 shadow-md'
+                : 'bg-stone-100 text-stone-900 hover:bg-stone-200'}
             `}
           >
             {verifyingId === fare.id ? (

@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { SlidersHorizontal, Loader2, CheckCircle } from 'lucide-react';
+import * as React from 'react';
+import { Loader2 } from 'lucide-react';
 import { FlightCard, FlightSegment } from './FlightCard';
 import { FlightSortBar } from './FlightSortBar';
 import { FilterDropdown } from './filters/FilterDropdown';
@@ -16,8 +16,8 @@ import { CreateTripModal } from './CreateTripModal';
 import { FareSelectionPanel } from './FareSelectionPanel';
 import { SeatSelectionModal } from './SeatSelectionModal';
 import { AncillarySelectionModal } from './AncillarySelectionModal';
-import { Toast } from '../../../components/Toast';
-import { revalidateItinerary, AncillaryOption } from '../../../../services/sabre';
+import { Toast } from '@/components/Toast';
+import { revalidateItinerary, AncillaryOption } from '@/services/sabre';
 
 interface FlightResultsProps {
   onCheckout?: (flight: FlightSegment) => void;
@@ -25,47 +25,47 @@ interface FlightResultsProps {
 }
 
 export const FlightResults: React.FC<FlightResultsProps> = ({ onCheckout, results }) => {
-  const [activeSort, setActiveSort] = useState<'recommended' | 'cheapest' | 'fastest'>('recommended');
-  const [flights, setFlights] = useState<FlightSegment[]>(results || []);
-  
+  const [activeSort, setActiveSort] = React.useState<'recommended' | 'cheapest' | 'fastest'>('recommended');
+  const [flights, setFlights] = React.useState<FlightSegment[]>(results || []);
+
   // Selection State
-  const [selectedFlightId, setSelectedFlightId] = useState<string | null>(null);
+  const [selectedFlightId, setSelectedFlightId] = React.useState<string | null>(null);
 
   // Filter States
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
-  const [stopsValue, setStopsValue] = useState('any');
-  const [timeRange, setTimeRange] = useState({ start: 0, end: 24 });
-  const [timeTab, setTimeTab] = useState<'depart' | 'arrive'>('depart');
+  const [activeFilter, setActiveFilter] = React.useState<string | null>(null);
+  const [stopsValue, setStopsValue] = React.useState('any');
+  const [timeRange, setTimeRange] = React.useState({ start: 0, end: 24 });
+  const [timeTab, setTimeTab] = React.useState<'depart' | 'arrive'>('depart');
 
   // Interaction States
-  const [isStale, setIsStale] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  
+  const [isStale, setIsStale] = React.useState(false);
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+
   // Modal States
-  const [flightToSave, setFlightToSave] = useState<FlightSegment | null>(null);
-  const [showBasicWarning, setShowBasicWarning] = useState(false);
-  const [showTripModal, setShowTripModal] = useState(false);
-  const [showCreateTripModal, setShowCreateTripModal] = useState(false);
-  
+  const [flightToSave, setFlightToSave] = React.useState<FlightSegment | null>(null);
+  const [showBasicWarning, setShowBasicWarning] = React.useState(false);
+  const [showTripModal, setShowTripModal] = React.useState(false);
+  const [showCreateTripModal, setShowCreateTripModal] = React.useState(false);
+
   // New Flow States
-  const [isVerifying, setIsVerifying] = useState<string | null>(null); // holds fareType during verify
-  const [showSeatSelection, setShowSeatSelection] = useState(false);
-  const [showAncillarySelection, setShowAncillarySelection] = useState(false);
-  const [tempFlightData, setTempFlightData] = useState<FlightSegment | null>(null);
+  // Removed isVerifying state as its value was never read
+  const [showSeatSelection, setShowSeatSelection] = React.useState(false);
+  const [showAncillarySelection, setShowAncillarySelection] = React.useState(false);
+  const [tempFlightData, setTempFlightData] = React.useState<FlightSegment | null>(null);
 
-  const [toast, setToast] = useState({ visible: false, message: '' });
+  const [toast, setToast] = React.useState({ visible: false, message: '' });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (results) setFlights(results);
   }, [results]);
 
-  useEffect(() => {
-    if (isRefreshing || showTripModal || showCreateTripModal || showSeatSelection || showAncillarySelection) return; 
-    const timer = setTimeout(() => setIsStale(true), 60000); 
+  React.useEffect(() => {
+    if (isRefreshing || showTripModal || showCreateTripModal || showSeatSelection || showAncillarySelection) return;
+    const timer = setTimeout(() => setIsStale(true), 60000);
     return () => clearTimeout(timer);
   }, [isRefreshing, showTripModal, showCreateTripModal, showSeatSelection, showAncillarySelection]);
 
-  const stats = useMemo(() => {
+  const stats = React.useMemo(() => {
     if (!flights.length) return null;
     const parseDuration = (str: string) => {
       const hours = parseInt(str.match(/(\d+)h/)?.[1] || '0');
@@ -81,7 +81,7 @@ export const FlightResults: React.FC<FlightResultsProps> = ({ onCheckout, result
     };
   }, [flights]);
 
-  const sortedFlights = useMemo(() => {
+  const sortedFlights = React.useMemo(() => {
     const list = [...flights];
     const parseDuration = (str: string) => {
       const hours = parseInt(str.match(/(\d+)h/)?.[1] || '0');
@@ -96,7 +96,7 @@ export const FlightResults: React.FC<FlightResultsProps> = ({ onCheckout, result
         return list.sort((a, b) => parseDuration(a.duration) - parseDuration(b.duration));
       case 'recommended':
       default:
-        return list; 
+        return list;
     }
   }, [flights, activeSort]);
 
@@ -122,11 +122,11 @@ export const FlightResults: React.FC<FlightResultsProps> = ({ onCheckout, result
 
     if (fareType === 'basic') {
       setShowBasicWarning(true); // Warning flow not implemented fully with new steps for brevity, assuming standard flow
-      return; 
+      return;
     }
 
     // Start verification
-    setIsVerifying(fareType);
+    // setIsVerifying(fareType); // Removed unused state
     try {
       await revalidateItinerary(flight);
       // Success, move to seats
@@ -136,7 +136,7 @@ export const FlightResults: React.FC<FlightResultsProps> = ({ onCheckout, result
       console.error(e);
       setToast({ visible: true, message: 'Fare no longer available' });
     } finally {
-      setIsVerifying(null);
+      // setIsVerifying(null); // Removed unused state
     }
   };
 
@@ -164,53 +164,53 @@ export const FlightResults: React.FC<FlightResultsProps> = ({ onCheckout, result
   if (isRefreshing) {
     return (
       <div className="flex flex-col items-center justify-center py-40 space-y-6 animate-fade-in w-full">
-         <div className="relative">
-           <div className="absolute inset-0 bg-stone-800 rounded-full animate-ping opacity-50"></div>
-           <div className="relative bg-black text-hyrox-yellow p-4 rounded-full shadow-xl border border-stone-800">
-             <Loader2 className="animate-spin" size={32} />
-           </div>
-         </div>
-         <div className="text-center space-y-1">
-           <p className="text-lg font-black uppercase text-white">Updating fares</p>
-           <p className="text-stone-500 font-bold uppercase tracking-widest text-xs">Checking latest availability...</p>
-         </div>
+        <div className="relative">
+          <div className="absolute inset-0 bg-stone-800 rounded-full animate-ping opacity-50"></div>
+          <div className="relative bg-black text-hyrox-yellow p-4 rounded-full shadow-xl border border-stone-800">
+            <Loader2 className="animate-spin" size={32} />
+          </div>
+        </div>
+        <div className="text-center space-y-1">
+          <p className="text-lg font-black uppercase text-white">Updating fares</p>
+          <p className="text-stone-500 font-bold uppercase tracking-widest text-xs">Checking latest availability...</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="animate-fade-in w-full relative">
-      <Toast 
-        message={toast.message} 
-        isVisible={toast.visible} 
-        onClose={() => setToast(prev => ({ ...prev, visible: false }))} 
+      <Toast
+        message={toast.message}
+        isVisible={toast.visible}
+        onClose={() => setToast(prev => ({ ...prev, visible: false }))}
       />
-      
-      <RefreshPromptModal 
+
+      <RefreshPromptModal
         isOpen={isStale}
         onRefresh={handleRefresh}
         onEdit={handleEditSearch}
         onClose={() => setIsStale(false)}
       />
 
-      <BasicEconomyWarningModal 
-          isOpen={showBasicWarning}
-          onClose={() => setShowBasicWarning(false)}
-          onConfirmBasic={() => { setShowBasicWarning(false); /* Should chain to verify */ }}
-          onUpgrade={() => { setShowBasicWarning(false); /* Should upgrade and chain */ }}
-          priceDifference={100}
+      <BasicEconomyWarningModal
+        isOpen={showBasicWarning}
+        onClose={() => setShowBasicWarning(false)}
+        onConfirmBasic={() => { setShowBasicWarning(false); /* Should chain to verify */ }}
+        onUpgrade={() => { setShowBasicWarning(false); /* Should upgrade and chain */ }}
+        priceDifference={100}
       />
 
       {/* Modals for Flow */}
       {tempFlightData && (
         <>
-          <SeatSelectionModal 
+          <SeatSelectionModal
             isOpen={showSeatSelection}
             onClose={() => setShowSeatSelection(false)}
             onConfirm={handleSeatConfirm}
             flight={tempFlightData}
           />
-          <AncillarySelectionModal 
+          <AncillarySelectionModal
             isOpen={showAncillarySelection}
             onClose={() => setShowAncillarySelection(false)}
             onConfirm={handleAncillaryConfirm}
@@ -219,74 +219,74 @@ export const FlightResults: React.FC<FlightResultsProps> = ({ onCheckout, result
         </>
       )}
 
-      <TripSelectionModal 
+      <TripSelectionModal
         isOpen={showTripModal}
         onClose={() => setShowTripModal(false)}
         onSelectTrip={() => {
-            setShowTripModal(false);
-            setToast({ visible: true, message: `Flight saved to trip successfully.` });
+          setShowTripModal(false);
+          setToast({ visible: true, message: `Flight saved to trip successfully.` });
         }}
         onCreateTrip={() => {
-            setShowTripModal(false);
-            setTimeout(() => setShowCreateTripModal(true), 200);
+          setShowTripModal(false);
+          setTimeout(() => setShowCreateTripModal(true), 200);
         }}
       />
 
-      <CreateTripModal 
+      <CreateTripModal
         isOpen={showCreateTripModal}
         onClose={() => setShowCreateTripModal(false)}
-        onCreate={(details) => {
-            setShowCreateTripModal(false);
-            setToast({ visible: true, message: `Saved to trip: ${details.name}` });
+        onCreate={(details: { name: string; destination: string; startDate: string; endDate: string }) => {
+          setShowCreateTripModal(false);
+          setToast({ visible: true, message: `Saved to trip: ${details.name}` });
         }}
-        flightDestination={flightToSave ? `${flightToSave.destination}` : undefined} 
+        flightDestination={flightToSave ? `${flightToSave.destination}` : undefined}
       />
 
       {/* Header Info */}
       <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-           <p className="text-stone-500 font-bold text-xs mb-2 uppercase tracking-widest">
-             {flights.length} results
-           </p>
-           <h2 className="text-3xl md:text-5xl font-black italic text-white tracking-tighter uppercase">
-             {flights.length > 0 ? `Select departure to ${flights[0].destination}` : 'No flights found'}
-           </h2>
+          <p className="text-stone-500 font-bold text-xs mb-2 uppercase tracking-widest">
+            {flights.length} results
+          </p>
+          <h2 className="text-3xl md:text-5xl font-black italic text-white tracking-tighter uppercase">
+            {flights.length > 0 ? `Select departure to ${flights[0].destination}` : 'No flights found'}
+          </h2>
         </div>
-        
+
         {/* Filter Pills */}
         <div className="flex items-center gap-3 overflow-x-auto pb-4 md:pb-0 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 relative z-40">
-           <FilterDropdown 
-             label="Stops" 
-             isOpen={activeFilter === 'stops'} 
-             onToggle={() => setActiveFilter(activeFilter === 'stops' ? null : 'stops')}
-             onClose={() => setActiveFilter(null)}
-             onReset={() => setStopsValue('any')}
-             isActive={stopsValue !== 'any'}
-             width="w-80"
-           >
-             <StopsFilter selected={stopsValue} onChange={setStopsValue} />
-           </FilterDropdown>
-           
-           <FilterDropdown 
-             label="Time" 
-             isOpen={activeFilter === 'time'} 
-             onToggle={() => setActiveFilter(activeFilter === 'time' ? null : 'time')} 
-             onClose={() => setActiveFilter(null)} 
-             width="w-96"
-           >
-             <TimeFilter 
-                range={timeRange}
-                onChange={setTimeRange}
-                tab={timeTab}
-                onTabChange={setTimeTab}
-             />
-           </FilterDropdown>
+          <FilterDropdown
+            label="Stops"
+            isOpen={activeFilter === 'stops'}
+            onToggle={() => setActiveFilter(activeFilter === 'stops' ? null : 'stops')}
+            onClose={() => setActiveFilter(null)}
+            onReset={() => setStopsValue('any')}
+            isActive={stopsValue !== 'any'}
+            width="w-80"
+          >
+            <StopsFilter selected={stopsValue} onChange={setStopsValue} />
+          </FilterDropdown>
 
-           <FilterDropdown label="Airlines" isOpen={activeFilter === 'airlines'} onToggle={() => setActiveFilter(activeFilter === 'airlines' ? null : 'airlines')} onClose={() => setActiveFilter(null)} width="w-80"><AirlinesFilter /></FilterDropdown>
-           <FilterDropdown label="Price" isOpen={activeFilter === 'price'} onToggle={() => setActiveFilter(activeFilter === 'price' ? null : 'price')} onClose={() => setActiveFilter(null)} width="w-80"><PriceFilter /></FilterDropdown>
-           <FilterDropdown label="Policy" isOpen={activeFilter === 'policy'} onToggle={() => setActiveFilter(activeFilter === 'policy' ? null : 'policy')} onClose={() => setActiveFilter(null)} width="w-96"><PolicyFilter /></FilterDropdown>
-           
-           <button onClick={() => setStopsValue('any')} className="text-stone-500 hover:text-white px-3 transition-colors uppercase font-bold text-xs tracking-wider"><span className="text-sm font-bold">Clear</span></button>
+          <FilterDropdown
+            label="Time"
+            isOpen={activeFilter === 'time'}
+            onToggle={() => setActiveFilter(activeFilter === 'time' ? null : 'time')}
+            onClose={() => setActiveFilter(null)}
+            width="w-96"
+          >
+            <TimeFilter
+              range={timeRange}
+              onChange={setTimeRange}
+              tab={timeTab}
+              onTabChange={setTimeTab}
+            />
+          </FilterDropdown>
+
+          <FilterDropdown label="Airlines" isOpen={activeFilter === 'airlines'} onToggle={() => setActiveFilter(activeFilter === 'airlines' ? null : 'airlines')} onClose={() => setActiveFilter(null)} width="w-80"><AirlinesFilter /></FilterDropdown>
+          <FilterDropdown label="Price" isOpen={activeFilter === 'price'} onToggle={() => setActiveFilter(activeFilter === 'price' ? null : 'price')} onClose={() => setActiveFilter(null)} width="w-80"><PriceFilter /></FilterDropdown>
+          <FilterDropdown label="Policy" isOpen={activeFilter === 'policy'} onToggle={() => setActiveFilter(activeFilter === 'policy' ? null : 'policy')} onClose={() => setActiveFilter(null)} width="w-96"><PolicyFilter /></FilterDropdown>
+
+          <button onClick={() => setStopsValue('any')} className="text-stone-500 hover:text-white px-3 transition-colors uppercase font-bold text-xs tracking-wider"><span className="text-sm font-bold">Clear</span></button>
         </div>
       </div>
 
@@ -301,29 +301,29 @@ export const FlightResults: React.FC<FlightResultsProps> = ({ onCheckout, result
           sortedFlights.map((flight) => {
             const isSelected = selectedFlightId === flight.id;
             return (
-              <FlightCard 
-                key={flight.id} 
-                flight={flight} 
+              <FlightCard
+                key={flight.id}
+                flight={flight}
                 isSelected={isSelected}
                 onSelect={() => handleFlightSelect(flight.id)}
                 onSave={() => handleSaveClick(flight)}
               >
                 {isSelected && (
-                  <FareSelectionPanel 
-                    basePrice={flight.price} 
-                    onSelect={handleFareSelection} 
+                  <FareSelectionPanel
+                    basePrice={flight.price}
+                    onSelect={handleFareSelection}
                   />
                 )}
               </FlightCard>
             );
           })
         )}
-        
+
         {flights.length > 0 && (
           <div className="pt-8 flex justify-center">
-             <button className="px-10 py-4 bg-stone-900 border border-stone-800 text-stone-400 font-bold rounded-2xl hover:bg-black hover:text-white hover:border-stone-600 transition-all shadow-sm uppercase tracking-wider text-xs">
-               Show more results
-             </button>
+            <button className="px-10 py-4 bg-stone-900 border border-stone-800 text-stone-400 font-bold rounded-2xl hover:bg-black hover:text-white hover:border-stone-600 transition-all shadow-sm uppercase tracking-wider text-xs">
+              Show more results
+            </button>
           </div>
         )}
       </div>

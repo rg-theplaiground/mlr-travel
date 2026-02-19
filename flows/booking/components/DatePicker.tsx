@@ -1,5 +1,4 @@
-
-import React, { useState, useRef, useEffect } from 'react';
+import * as React from 'react';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 
 interface DatePickerProps {
@@ -17,30 +16,30 @@ const MONTHS = [
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-export const DatePicker: React.FC<DatePickerProps> = ({ 
-  label, 
-  placeholder = 'Select date', 
-  value, 
-  onChange, 
+export const DatePicker: React.FC<DatePickerProps> = ({
+  label,
+  placeholder = 'Select date',
+  value,
+  onChange,
   minDate,
   className = ''
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  // Calendar Navigation State
-  const [viewDate, setViewDate] = useState(value || new Date());
-  
-  // Time Slider State
-  const [timeRange, setTimeRange] = useState({ start: 0, end: 24 });
-  const [isDragging, setIsDragging] = useState<'start' | 'end' | null>(null);
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  // Calendar Navigation State
+  const [viewDate, setViewDate] = React.useState(value || new Date());
+
+  // Time Slider State
+  const [timeRange, setTimeRange] = React.useState({ start: 0, end: 24 });
+  const [isDragging, setIsDragging] = React.useState<'start' | 'end' | null>(null);
+  const sliderRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
     if (value) setViewDate(value);
   }, [value, isOpen]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
@@ -51,25 +50,25 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   }, []);
 
   // Slider Logic
-  useEffect(() => {
+  React.useEffect(() => {
     const handleMouseUp = () => setIsDragging(null);
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging || !sliderRef.current) return;
-      
+
       const rect = sliderRef.current.getBoundingClientRect();
       const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
       const percent = x / rect.width;
       const rawValue = percent * 24;
-      
+
       // Snap to nearest half hour or integer? Integer for simplicity
       const value = Math.round(rawValue);
 
       if (isDragging === 'start') {
         const newStart = Math.min(value, timeRange.end - 1);
-        setTimeRange(prev => ({ ...prev, start: Math.max(0, newStart) }));
+        setTimeRange((prev: { start: number; end: number }) => ({ ...prev, start: Math.max(0, newStart) }));
       } else {
         const newEnd = Math.max(value, timeRange.start + 1);
-        setTimeRange(prev => ({ ...prev, end: Math.min(24, newEnd) }));
+        setTimeRange((prev: { start: number; end: number }) => ({ ...prev, end: Math.min(24, newEnd) }));
       }
     };
 
@@ -134,10 +133,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   };
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
     });
   };
 
@@ -154,13 +153,13 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     // Days
     for (let day = 1; day <= daysInMonth; day++) {
       const isDisabled = isDateDisabled(day);
-      const isSelected = value && 
-        value.getDate() === day && 
-        value.getMonth() === viewDate.getMonth() && 
+      const isSelected = value &&
+        value.getDate() === day &&
+        value.getMonth() === viewDate.getMonth() &&
         value.getFullYear() === viewDate.getFullYear();
-      
-      const isToday = new Date().getDate() === day && 
-        new Date().getMonth() === viewDate.getMonth() && 
+
+      const isToday = new Date().getDate() === day &&
+        new Date().getMonth() === viewDate.getMonth() &&
         new Date().getFullYear() === viewDate.getFullYear();
 
       days.push(
@@ -173,10 +172,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           disabled={isDisabled}
           className={`
             w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all
-            ${isSelected 
-              ? 'bg-stone-900 text-white shadow-lg shadow-stone-900/20' 
-              : isDisabled 
-                ? 'text-stone-300 cursor-not-allowed' 
+            ${isSelected
+              ? 'bg-stone-900 text-white shadow-lg shadow-stone-900/20'
+              : isDisabled
+                ? 'text-stone-300 cursor-not-allowed'
                 : 'text-stone-700 hover:bg-stone-100'}
             ${isToday && !isSelected ? 'border border-stone-300' : ''}
           `}
@@ -190,7 +189,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   return (
     <div className={`relative h-full ${className}`} ref={containerRef}>
-      <div 
+      <div
         onClick={() => setIsOpen(!isOpen)}
         className="h-full flex flex-col justify-center cursor-pointer group"
       >
@@ -209,58 +208,58 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
       {isOpen && (
         <div className="absolute top-full left-0 mt-4 bg-white rounded-3xl shadow-xl border border-stone-100 p-6 z-[60] w-[340px] animate-scale-in origin-top-left">
-          
+
           {/* Time Slider Section */}
           <div className="mb-6 px-1">
-             <div className="flex justify-between items-center mb-6">
-               <span className="text-sm font-bold text-stone-900">
-                 {label ? `${label} time` : 'Time'}
-               </span>
-               <span className="text-sm font-medium text-stone-500 bg-stone-100 px-2 py-1 rounded-md">
-                 {formatRange()}
-               </span>
-             </div>
-             <div 
-               className="relative h-6 flex items-center select-none cursor-pointer" 
-               ref={sliderRef}
-             >
-                {/* Track Background */}
-                <div className="absolute w-full h-1.5 bg-stone-100 rounded-full"></div>
-                
-                {/* Active Track */}
-                <div 
-                  className="absolute h-1.5 bg-stone-900 rounded-full"
-                  style={{ 
-                    left: `${(timeRange.start / 24) * 100}%`, 
-                    right: `${100 - (timeRange.end / 24) * 100}%` 
-                  }}
-                ></div>
-                
-                {/* Start Thumb */}
-                <div 
-                   onMouseDown={handleMouseDown('start')}
-                   className="absolute w-6 h-6 bg-white border-[3px] border-stone-900 rounded-full shadow-md cursor-grab active:cursor-grabbing hover:scale-110 transition-transform z-10 flex items-center justify-center top-0"
-                   style={{ left: `calc(${(timeRange.start / 24) * 100}% - 12px)` }}
-                >
-                  <div className="w-1.5 h-1.5 bg-stone-900 rounded-full" />
-                </div>
+            <div className="flex justify-between items-center mb-6">
+              <span className="text-sm font-bold text-stone-900">
+                {label ? `${label} time` : 'Time'}
+              </span>
+              <span className="text-sm font-medium text-stone-500 bg-stone-100 px-2 py-1 rounded-md">
+                {formatRange()}
+              </span>
+            </div>
+            <div
+              className="relative h-6 flex items-center select-none cursor-pointer"
+              ref={sliderRef}
+            >
+              {/* Track Background */}
+              <div className="absolute w-full h-1.5 bg-stone-100 rounded-full"></div>
 
-                {/* End Thumb */}
-                <div 
-                   onMouseDown={handleMouseDown('end')}
-                   className="absolute w-6 h-6 bg-white border-[3px] border-stone-900 rounded-full shadow-md cursor-grab active:cursor-grabbing hover:scale-110 transition-transform z-10 flex items-center justify-center top-0"
-                   style={{ left: `calc(${(timeRange.end / 24) * 100}% - 12px)` }}
-                >
-                   <div className="w-1.5 h-1.5 bg-stone-900 rounded-full" />
-                </div>
-             </div>
-             
-             {/* Time Labels */}
-             <div className="flex justify-between mt-3 text-[10px] font-bold text-stone-400 uppercase tracking-wider">
-               <span>12AM</span>
-               <span>Noon</span>
-               <span>11PM</span>
-             </div>
+              {/* Active Track */}
+              <div
+                className="absolute h-1.5 bg-stone-900 rounded-full"
+                style={{
+                  left: `${(timeRange.start / 24) * 100}%`,
+                  right: `${100 - (timeRange.end / 24) * 100}%`
+                }}
+              ></div>
+
+              {/* Start Thumb */}
+              <div
+                onMouseDown={handleMouseDown('start')}
+                className="absolute w-6 h-6 bg-white border-[3px] border-stone-900 rounded-full shadow-md cursor-grab active:cursor-grabbing hover:scale-110 transition-transform z-10 flex items-center justify-center top-0"
+                style={{ left: `calc(${(timeRange.start / 24) * 100}% - 12px)` }}
+              >
+                <div className="w-1.5 h-1.5 bg-stone-900 rounded-full" />
+              </div>
+
+              {/* End Thumb */}
+              <div
+                onMouseDown={handleMouseDown('end')}
+                className="absolute w-6 h-6 bg-white border-[3px] border-stone-900 rounded-full shadow-md cursor-grab active:cursor-grabbing hover:scale-110 transition-transform z-10 flex items-center justify-center top-0"
+                style={{ left: `calc(${(timeRange.end / 24) * 100}% - 12px)` }}
+              >
+                <div className="w-1.5 h-1.5 bg-stone-900 rounded-full" />
+              </div>
+            </div>
+
+            {/* Time Labels */}
+            <div className="flex justify-between mt-3 text-[10px] font-bold text-stone-400 uppercase tracking-wider">
+              <span>12AM</span>
+              <span>Noon</span>
+              <span>11PM</span>
+            </div>
           </div>
 
           <div className="h-px bg-stone-100 w-full mb-6"></div>
@@ -287,26 +286,26 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             ))}
             {renderCalendarDays()}
           </div>
-          
+
           <div className="mt-4 pt-4 border-t border-stone-100 flex justify-between items-center">
-             <button 
-               onClick={() => {
-                 setTimeRange({ start: 0, end: 24 });
-                 // Note: Does not reset date, purely resets slider
-               }}
-               className="text-sm font-bold text-stone-400 hover:text-stone-600 transition-colors"
-             >
-               Reset time
-             </button>
-             
-             <button 
-               onClick={() => {
-                 setIsOpen(false);
-               }}
-               className="px-4 py-2 bg-stone-900 text-white rounded-xl text-sm font-bold shadow-md hover:bg-black transition-colors"
-             >
-               Done
-             </button>
+            <button
+              onClick={() => {
+                setTimeRange({ start: 0, end: 24 });
+                // Note: Does not reset date, purely resets slider
+              }}
+              className="text-sm font-bold text-stone-400 hover:text-stone-600 transition-colors"
+            >
+              Reset time
+            </button>
+
+            <button
+              onClick={() => {
+                setIsOpen(false);
+              }}
+              className="px-4 py-2 bg-stone-900 text-white rounded-xl text-sm font-bold shadow-md hover:bg-black transition-colors"
+            >
+              Done
+            </button>
           </div>
         </div>
       )}

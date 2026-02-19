@@ -1,14 +1,15 @@
-// Hardcoded credentials as requested
-const CLIENT_ID = process.env.SABRE_CLIENT_ID;
-const CLIENT_SECRET = process.env.SABRE_CLIENT_SECRET;
+// Sabre Credentials (from environment variables)
+const CLIENT_ID = process.env.SABRE_CLIENT_ID ?? '';
+const CLIENT_SECRET = process.env.SABRE_CLIENT_SECRET ?? '';
 
 // Sabre Endpoints
 const AUTH_ENDPOINT = 'https://api.cert.platform.sabre.com/v2/auth/token';
-const HOTEL_AVAIL_ENDPOINT = 'https://api.cert.platform.sabre.com/v5/get/hotelavail';
-const HOTEL_CONTENT_ENDPOINT = 'https://api.cert.platform.sabre.com/v4.0.0/get/hotelcontent';
-const HOTEL_DETAILS_ENDPOINT = 'https://api.cert.platform.sabre.com/v5/get/hoteldetails';
-const HOTEL_PRICE_CHECK_ENDPOINT = 'https://api.cert.platform.sabre.com/v5/hotel/pricecheck';
-const CREATE_BOOKING_ENDPOINT = 'https://api.cert.platform.sabre.com/v1/trip/orders/createBooking';
+// These were unused and causing TS6133 errors
+// const HOTEL_AVAIL_ENDPOINT = 'https://api.cert.platform.sabre.com/v5/get/hotelavail';
+// const HOTEL_CONTENT_ENDPOINT = 'https://api.cert.platform.sabre.com/v4.0.0/get/hotelcontent';
+// const HOTEL_DETAILS_ENDPOINT = 'https://api.cert.platform.sabre.com/v5/get/hoteldetails';
+// const HOTEL_PRICE_CHECK_ENDPOINT = 'https://api.cert.platform.sabre.com/v5/hotel/pricecheck';
+// const CREATE_BOOKING_ENDPOINT = 'https://api.cert.platform.sabre.com/v1/trip/orders/createBooking';
 
 // Interfaces
 export interface HotelSearchCriteria {
@@ -226,13 +227,13 @@ const generateMockHotelResponse = () => {
     };
 }
 
-export const searchHotels = async (criteria: HotelSearchCriteria) => {
+export const searchHotels = async (_criteria: HotelSearchCriteria) => {
     // Always return mock data for this demo to ensure stability
     await new Promise(r => setTimeout(r, 800)); // Simulate network
     return generateMockHotelResponse();
 };
 
-export const getHotelDetails = async (hotelCode: string, checkIn: string, checkOut: string, adults: number): Promise<HotelContentDTO | null> => {
+export const getHotelDetails = async (hotelCode: string, _checkIn: string, _checkOut: string, _adults: number): Promise<HotelContentDTO | null> => {
     // Fixed: MOCK_HOTEL_DATA not defined
     const hotel = MOCK_HOTELS.find(h => h.id === hotelCode);
     await new Promise(resolve => setTimeout(resolve, 600));
@@ -249,16 +250,16 @@ export const getHotelDetails = async (hotelCode: string, checkIn: string, checkO
         contact: { phone: "+1 800 MLR RUGBY", email: "concierge@mlr-travel.com" },
         policies: { checkIn: "15:00", checkOut: "11:00" },
         services: ["Concierge", "Match Shuttle", "Laundry"],
-        rate: { amount: parseFloat(hotel?.price as any || "200"), currency: "USD" },
+        rate: { amount: parseFloat(hotel?.price ?? "200"), currency: "USD" },
         rateKey: "MOCK_KEY"
     };
     return baseDetails;
 };
 
-export const createBooking = async (req: any) => { return { success: true, pnr: "MLR" + Math.floor(Math.random() * 10000) }; };
-export const searchLowFares = async (c: any) => { return {}; };
+export const createBooking = async (_req: any) => { return { success: true, pnr: "MLR" + Math.floor(Math.random() * 10000) }; };
+export const searchLowFares = async (_c: any) => { return {}; };
 
-export const getSeatMap = async (f: any): Promise<SeatMapResponse> => {
+export const getSeatMap = async (_f: any): Promise<SeatMapResponse> => {
     return {
         response: {
             priceDefinitions: [
@@ -282,9 +283,9 @@ export const getSeatMap = async (f: any): Promise<SeatMapResponse> => {
     };
 };
 
-export const revalidateItinerary = async (f: any) => { return { success: true }; };
+export const revalidateItinerary = async (_f: any) => { return { success: true }; };
 
-export const getAncillaries = async (f: string): Promise<AncillaryOption[]> => {
+export const getAncillaries = async (_f: string): Promise<AncillaryOption[]> => {
     return [
         { id: 'bag1', name: 'Checked Bag', type: 'BAG', price: 35, description: 'Up to 23kg' },
         { id: 'wifi', name: 'In-flight Wi-Fi', type: 'WIFI', price: 15, description: 'Stream quality' },
@@ -292,7 +293,7 @@ export const getAncillaries = async (f: string): Promise<AncillaryOption[]> => {
     ];
 };
 
-export const getGeoAutocomplete = async (q: string, category?: string): Promise<GeoDoc[]> => {
+export const getGeoAutocomplete = async (_q: string, category?: string): Promise<GeoDoc[]> => {
     // Mock response matching GeoDoc interface
     if (category === 'AIR') {
         return [
@@ -305,23 +306,23 @@ export const getGeoAutocomplete = async (q: string, category?: string): Promise<
     ];
 };
 
-export const autocompleteHotelName = async (q: string): Promise<HotelAutocompleteItem[]> => {
+export const autocompleteHotelName = async (_q: string): Promise<HotelAutocompleteItem[]> => {
     return [
-        { hotelName: "Hilton " + q, city: "San Diego", countryName: "USA" }
+        { hotelName: "Hilton " + _q, city: "San Diego", countryName: "USA" }
     ];
 };
 
-export const geoCodeLocation = async (q: string): Promise<GeoCodeItem[]> => {
+export const geoCodeLocation = async (_q: string): Promise<GeoCodeItem[]> => {
     return [
-        { name: q + " Stadium", formattedAddress: "123 Stadium Way", city: "San Diego", country: "USA" }
+        { name: _q + " Stadium", formattedAddress: "123 Stadium Way", city: "San Diego", country: "USA" }
     ];
 };
 
 export const getHotelContent = async (c: string) => { return getHotelDetails(c, "", "", 1); };
 
-export const hotelPriceCheck = async (k: string) => { return { PriceChange: false }; };
+export const hotelPriceCheck = async (_k: string) => { return { PriceChange: false }; };
 
-export const getTravelSeasonality = async (d: string): Promise<SeasonalityResponse | null> => {
+export const getTravelSeasonality = async (_d: string): Promise<SeasonalityResponse | null> => {
     // Mock 52 weeks
     const data: SeasonalityItem[] = Array.from({ length: 52 }).map((_, i) => ({
         YearWeekNumber: i + 1,
